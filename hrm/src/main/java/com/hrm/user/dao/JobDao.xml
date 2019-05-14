@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.JobDao">
+
+    <select id="selectAllJob" resultType="Job">
+        select * from job_inf
+        <where>
+            <if test="job.name!=null and job.name!=''">
+                and name like '%' #{job.name} '%'
+            </if>
+            <if test="job.remark!=null and job.remark!=''">
+                and remark like '%' #{job.remark} '%'
+            </if>
+        </where>
+        limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+    </select>
+    <select id="selectCount" resultType="Integer">
+        select count(*) from job_inf
+        <where>
+            <if test="name!=null and name!=''">
+                and name like '%' #{name} '%'
+            </if>
+            <if test="remark!=null and remark!=''">
+                and remark=#{remark}
+            </if>
+        </where>
+    </select>
+    <delete id="removeJob">
+        delete from job_inf where id in
+        <foreach collection="array" index="index" open="(" separator="," close=")" item="ids">
+            #{ids}
+        </foreach>
+    </delete>
+    <insert id="addJob">
+        insert into job_inf (name,remark) values(#{name},#{remark})
+    </insert>
+    <select id="selectJobById" resultType="Job">
+        select * from job_inf where id =#{id}
+    </select>
+    <update id="updateJob">
+        update job_inf set name=#{name},remark=#{remark} where id=#{id}
+    </update>
+
+
+</mapper>

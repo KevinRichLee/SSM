@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd">
+         <!-- 阿里巴巴数据源,druid数据源 -->
+          <bean id="myDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+             <property name="driverClassName" value="${jdbc.driver}"/>
+     	     <property name="url" value="${jdbc.url}"/>
+     	     <property name="username" value="${jdbc.user}"/>
+     	     <property name="password" value="${jdbc.password}"/>
+          </bean>
+           <context:property-placeholder location="classpath:/resources/jdbc.properties"/>
+       
+        <!--spring与mybatis整合 生成sqlSessionFactory -->
+     <bean id="mySqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+     	<property name="dataSource" ref="myDataSource"/>
+     	<property name="configLocation" value="classpath:/resources/spring-mybatis.xml"/>
+     
+     </bean>
+        <!-- 生成Dao的动态代理 -->
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+         <property name="sqlSessionFactoryBeanName" value="mySqlSessionFactory"/>
+         <property name="basePackage" value="com.aynu.rjxy.oa.dao"></property>
+        </bean>
+     
+     <!-- 定义service对象 -->
+         <bean id="newsLabelService" class="com.aynu.rjxy.oa.INewsLabelService.INewsLabelServiceImpl">
+          <property name="dao" ref="INewsLabelDao"></property>
+         </bean>
+</beans>

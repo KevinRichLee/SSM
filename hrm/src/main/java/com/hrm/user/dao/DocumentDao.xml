@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.DocumentDao">
+
+    <select id="selectUser" resultType="User">
+        select * from user_inf where id=#{user_id}
+    </select>
+    <resultMap id="selectMapping" type="Document">
+        <association property="user"
+                      javaType="User"
+                      select="selectUser"
+                      column="user_id"/>
+    </resultMap>
+    <select id="selectByCondition" resultMap="selectMapping">
+        select * from document_inf
+        <where>
+            <if test="document.title!=null and document.title!=''">
+                and title like "%"#{document.title}"%"
+            </if>
+        </where>
+        limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+    </select>
+    <select id="selectCount" resultType="Integer">
+        select count(*) from document_inf
+        <where>
+            <if test="title!=null and title!=''">
+                and title like "%"#{title}"%"
+            </if>
+        </where>
+    </select>
+    <insert id="addDocument">
+        insert into document_inf (title,filename,remark,user_id) values (#{title},#{filename},#{remark},#{user_id})
+    </insert>
+    <delete id="deleteDocument">
+        delete from document_inf where id in
+        <foreach collection="array" index="index" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <select id="selectByFileName" resultType="String">
+        select filename from document_inf  where id =#{id}
+    </select>
+    <select id="selectDocument" resultMap="selectMapping">
+        select * from document_inf where id=#{id}
+    </select>
+    <update id="updateDocument">
+        update document_inf 
+        <set>
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark=#{remark},
+            </if>
+            <if test="filename!=null and filename!=''">
+                filename=#{filename},
+            </if>
+            <if test="user_id!=null and user_id!=''">
+                user_id=#{user_id}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+</mapper>

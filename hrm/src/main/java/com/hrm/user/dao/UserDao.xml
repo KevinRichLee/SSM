@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.UserDao">
+    <select id="loginByUser" parameterType="String" resultType="User">
+		select * from user_inf where loginname=#{loginname} and password=#{password}
+	</select>
+	<select id="selectUserById" resultType="User">
+		select * from user_inf where id=#{id}
+	</select>
+	<select id="selectUser" resultType="User">
+		select * from user_inf
+		<where>
+			<if test="user.username!=null and user.username!=''">
+			   and username like "%"#{user.username}"%"
+			</if>
+			<if test="user.status!=null and user.status!=''">
+				and status = #{user.status}
+			</if>
+		</where>
+		limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+	</select>
+	<select id="selectloginname" resultType="String">
+		select status from user_inf where loginname=#{loginname}
+	</select>
+	<select id="selectTotal" resultType="Integer">
+		select COUNT(*) from user_inf
+		<where>
+			<if test="username!=null and username!=''">
+				and username like "%"#{username}"%"
+			</if>
+			<if test="status!=null and status!=''">
+				and status = #{status}
+			</if>
+		</where>
+	</select>
+	<insert id="addUser" parameterType="User">
+		insert into user_inf(loginname,password,status,username)
+		values (#{loginname},#{password},#{status},#{username})
+	</insert>
+    <delete id="deleteUser" parameterType="int[]">
+        delete from user_inf where id in 
+        <foreach collection="array" index="index" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+	</delete>
+
+	<update id="modifyUser" parameterType="User">
+		update user_inf set username=#{username},status=#{status},password=#{password}
+		where id=#{ID}
+	</update>
+</mapper>

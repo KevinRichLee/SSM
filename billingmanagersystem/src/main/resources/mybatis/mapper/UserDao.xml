@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.aynu.user.dao.UserDao">
+
+    <select id="login" resultType="User">
+        select * from user where username=#{username} and password=#{password}
+    </select>
+    <select id="getUser" resultType="User">
+        select * from user
+        <where>
+            <if test="username!=null and username!=''">
+                and username like "%"#{username}"%"
+            </if>
+        </where>
+    </select>
+    <select id="getUserById" resultType="User">
+        select * from user where id=#{id}
+    </select>
+    <select id="getUpdateId" resultType="User">
+        select * from user where id=#{id}
+    </select>
+    <update id="update">
+        update user set real_name=#{real_name},gender=#{gender},birthday=#{birthday}
+        ,user_type=#{user_type} where id=#{id}
+    </update>
+    <delete id="delete">
+        delete from user where id=#{id}
+    </delete>
+    <insert id="add">
+        insert into user (username,real_name,password,gender,user_type)
+        values(#{username},#{real_name},#{password},#{gender},#{user_type})
+
+    </insert>
+</mapper>

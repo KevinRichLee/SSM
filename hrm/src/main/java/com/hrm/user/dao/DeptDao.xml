@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.DeptDao">
+    <select id="selectAllDept"  resultType="Dept">
+        select * from dept_inf
+        <where>
+            <if test="dept.name!=null and dept.name!=''">
+
+             name like "%"#{dept.name}"%"
+            </if>
+
+        </where>
+        limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+    </select>
+
+    <select id="selectCount" resultType="Integer">
+        select count(*) from dept_inf
+        <where>
+            <if test="name!=null and name!=''">
+                name like "%"#{name}"%"
+            </if>
+        </where>
+    </select>
+    <delete id="deleteById">
+        delete from dept_inf where id in
+    <foreach collection="array" index="index" item="ids" open="("  separator="," close=")">
+        #{ids}
+    </foreach>
+    </delete>
+    <insert id="insertDept">
+        insert into dept_inf (name,remark) values (#{name},#{remark});
+    </insert>
+    <select id="selectDeptById" resultType="Dept">
+        select * from dept_inf where id=#{id}
+    </select>
+    <update id="updateDept">
+        update dept_inf set name=#{name},remark=#{remark} where id=#{id}
+    </update>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

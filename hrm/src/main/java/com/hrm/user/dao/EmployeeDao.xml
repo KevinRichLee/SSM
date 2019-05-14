@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.EmployeeDao">
+
+    <select id="selectJobById" resultType="Job">
+        select * from job_inf where id=#{job_id}
+        <!--<where>-->
+            <!--<if test="employee.job_id!=null and employee.job_id!=''">-->
+                <!--id=#{job_id}-->
+            <!--</if>-->
+        <!--</where>-->
+    </select>
+    <select id="selectDeptById" resultType="Dept">
+        select * from dept_inf where id=#{dept_id}
+        <!--<where>-->
+            <!--<if test="employee.dept_id!=null and employee.dept_id!=''">-->
+                <!--id=#{dept_id}-->
+            <!--</if>-->
+        <!--</where>-->
+    </select>
+    <resultMap id="selectMapping" type="Employee">
+        <association property="dept"
+                     javaType="Dept"
+                     select="selectDeptById"
+                     column="dept_id"/>
+        <association property="job"
+                     javaType="Job"
+                     select="selectJobById"
+                     column="job_id"/>
+    </resultMap>
+    <select id="selectByCondition" resultMap="selectMapping" >
+        select * from employee_inf
+        <where>
+            <if test="employee.dept_id!=null and employee.dept_id!=''">
+                and dept_id =#{employee.dept_id}
+            </if>
+            <if test="employee.job_id!=null and employee.job_id!=''">
+                and job_id =#{employee.job_id}
+            </if>
+            <if test="employee.sex!=null and employee.sex!=''">
+                and sex = #{employee.sex}
+            </if>
+            <if test="employee.name!=null and employee.name!=''">
+                and name like "%"#{employee.name}"%"
+            </if>
+            <if test="employee.phone!=null and employee.phone!=''">
+                and phone like "%"#{employee.phone}"%"
+            </if>
+            <if test="employee.card_id!=null and employee.card_id!=''">
+                and card_id like "%"#{employee.card_id}"%"
+            </if>
+        </where>
+        limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+    </select>
+
+
+    <select id="selectCount" resultType="Integer">
+        select count(*) from employee_inf
+        <where>
+            <if test="dept_id!=null and dept_id!=''">
+                and dept_id =#{dept_id}
+            </if>
+            <if test="job_id!=null and job_id!=''">
+                and job_id  =#{job_id}
+            </if>
+            <if test="sex!=null and sex!=''">
+                and sex = #{sex}
+            </if>
+            <if test="name!=null and name!=''">
+                and name like "%"#{name}"%"
+            </if>
+            <if test="phone!=null and phone!=''">
+                and phone like "%"#{phone}"%"
+            </if>
+            <if test="card_id!=null and card_id!=''">
+                and card_id like "%"#{card_id}"%"
+            </if>
+        </where>
+    </select>
+    <delete id="deleteEmplee">
+        delete from employee_inf where id in
+        <foreach collection="array" item="ids" open="(" separator="," close=")" index="index">
+            #{ids}
+        </foreach>
+    </delete>
+    <!--添加列表查询-->
+    <select id="addSelect" resultMap="selectMapping">
+        select * from employee_inf
+    </select>
+    <insert id="addEmployee">
+        insert into employee_inf
+        (name,dept_id,job_id,card_id,education,email,phone,tel,party,qq_num,address,post_code,birthday,race,speciality,hobby,remark)
+        values(#{name},#{dept_id},#{job_id},#{card_id},#{education},#{email},#{phone},#{tel},#{party},#{qq_num},#{address},#{post_code},#{birthday},
+        #{race},#{speciality},#{hobby},#{remark})
+        <!--<where>-->
+            <!--<if test="sex!=null and sex!=''">-->
+                <!--and sex=#{sex}-->
+            <!--</if>-->
+            <!--<if test="dept_id!=null and dept_id!=''">-->
+                <!--and dept_id=#{dept_id}-->
+            <!--</if>-->
+            <!--<if test="job_id!=null and job_id!=''">-->
+                <!--and job_id=#{job_id}-->
+            <!--</if>-->
+        <!--</where>-->
+    </insert>
+
+
+    <select id="updateSelectEmployee" resultType="Employee">
+        select * from employee_inf where id = #{id}
+    </select>
+    <update id="updateEmployee" parameterType="Employee">
+        update employee_inf set name=#{name},card_id=#{card_id},sex=#{sex},education=#{education},email=#{email},phone=#{phone},tel=#{tel},
+        party=#{party},qq_num=#{qq_num},address=#{address},post_code=#{post_code},birthday=#{birthday},race=#{race},speciality=#{speciality},
+        hobby=#{hobby},remark=#{remark} where id=#{id}
+    </update>
+    <select id="selectAllDept" resultType="Dept">
+        select * from dept_inf
+    </select>
+    <select id="selectAllJob" resultType="Job">
+        select * from job_inf
+    </select>
+</mapper>

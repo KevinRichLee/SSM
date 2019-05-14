@@ -1,0 +1,23 @@
+server:
+  port: 8999
+
+#mybatis配置
+mybatis:
+  config-location: classpath:/mybatis/mybatis.cfg.xml
+  type-aliases-package: cn.edu.aynu.user.entities
+  mapper-locations: classpath:mybatis/mapper/**/*.xml
+#Spring配置
+spring:
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://www.kevinlee.online:3306/bill?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8&useSSL=false
+    username: root
+    password: 123456
+    dbcp2:
+      min-idle: 5
+      initial-size: 5
+      max-total: 5
+      max-wait-millis: 200
+
+

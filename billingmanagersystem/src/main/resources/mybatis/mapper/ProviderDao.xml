@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.aynu.user.dao.ProviderDao">
+    <!--供应商管理-->
+    <select id="getAll" resultType="Provider">
+        select * from provider where providerName like '%' #{providerName} '%'
+    </select>
+    <select id="getAllProviders" resultType="Provider">
+        select * from provider
+    </select>
+    <select id="countProvider" resultType="Integer">
+        select count(*) from provider
+    </select>
+    <select id="getProviderPid" resultType="Provider">
+        select * from provider where pid=#{pid}
+    </select>
+    <select id="getProviderEcho" resultType="Provider">
+        select * from provider where pid=#{pid}
+    </select>
+    <update id="updateProvider">
+        update provider set providerName=#{providerName},people=#{people},phone=#{phone},
+        address=#{address},fax=#{fax},describes=#{describes} where pid=#{pid}
+    </update>
+    <insert id="addProvider">
+        insert into provider (provider_code,providerName,people,phone,address,fax,describes)
+        values(#{provider_code},#{providerName},#{people},#{phone},#{address},#{fax},#{describes})
+    </insert>
+    <delete id="deleteProvider">
+        delete from provider where pid=#{pid}
+    </delete>
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

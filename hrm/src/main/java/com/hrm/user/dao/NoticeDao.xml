@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace：命名空间，用于隔离sql-->
+<mapper namespace="com.hrm.user.dao.NoticeDao">
+
+    <select id="selectUser" resultType="User">
+        select * from user_inf where id=#{user_id}
+    </select>
+    <resultMap id="selectMapping" type="Notice">
+        <association property="user"
+                      javaType="User"
+                      select="selectUser"
+                      column="user_id"/>
+    </resultMap>
+    <select id="selectByCondition" resultMap="selectMapping">
+        select * from notice_inf
+        <where>
+            <if test="notice.title!=null and notice.title!=''">
+                and title like "%"#{notice.title}"%"
+            </if>
+            <if test="notice.content!=null and notice.content!=''">
+                and content like "%"#{notice.content}"%"
+            </if>
+        </where>
+        limit #{pageModel.firstLimitParam},#{pageModel.pageSize}
+    </select>
+    <select id="selectCount" resultType="Integer">
+        select count(*) from notice_inf
+        <where>
+            <if test="title!=null and title!=''">
+                and title like "%"#{title}"%"
+            </if>
+            <if test="content!=null and content!=''">
+                and content like "%"#{content}"%"
+            </if>
+        </where>
+    </select>
+    <delete id="deleteNotice">
+        delete from notice_inf where id in
+        <foreach collection="array" item="ids" open="(" separator="," close=")">
+            #{ids}
+        </foreach>
+    </delete>
+    <select id="selectNoticeById" resultType="Notice">
+        select * from notice_inf where id=#{id}
+    </select>
+    <select id="updateSelect" resultType="Notice">
+        select * from notice_inf where id=#{id}
+    </select>
+    <update id="updateNotice">
+        update notice_inf set title=#{title},content=#{content} where id=#{id}
+    </update>
+    <insert id="addNotice">
+        insert into notice_inf (title,content) values(#{title},#{content})
+    </insert>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</mapper>

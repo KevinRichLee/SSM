@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.aynu.user.dao.BillDao">
+    <select id="get" resultType="Bill">
+        select * from bill
+        <where>
+            <if test="bill_name!=null and bill_name!=''">
+                and bill_name like "%"#{bill_name}"%"
+            </if>
+            <if test="bid!=null and bid!=''">
+                and bid=#{bid}
+            </if>
+            <if test="pay!=null and pay!=''">
+                and pay=#{pay}
+            </if>
+        </where>
+    </select>
+    <select id="getId" resultType="Bill">
+        select * from bill where bid=#{bid}
+    </select>
+</mapper>

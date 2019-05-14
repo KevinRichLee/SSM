@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>梦学谷账单管理系统</title>
+    <link rel="stylesheet" href="../css/public.css"/>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+
+<body>
+<script>
+    function checkForm(){
+
+        //校验表单内的数据
+        //定义出来如果有错误，将flag置为false即可
+        var flag = true;
+        //进行判断
+        //1.当前用户，不允许修改用户名(将文本框置为readyonly只读属性) 需要显示用户名(从session获得即可)
+        //2.获得用户输入的旧密码要与原来密码一致
+        //3.判断新密码不能为Null,并且确认密码必须和新密码一致
+        var newPwd = $("#newPassword").val();
+        var rePwd = $("#rePassword").val();
+        if(newPwd.length==0){
+            alert("新密码不能为空");
+            flag=false;
+        }
+        if(newPwd!=rePwd){
+            alert("新密码和确认密码不一致 请修改后尝试");
+            flag=false;
+        }
+        //否则返回true
+        return flag;
+    }
+</script>
+<!--头部-->
+<header class="publicHeader">
+    <h1>梦学谷账单管理系统</h1>
+
+    <div class="publicHeaderR">
+        <p><span>下午好！</span><span style="color: #fff21b"> Admin</span> , 欢迎你！</p>
+        <a href="../main/login.html">退出</a>
+    </div>
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public::#public_time">
+    <span id="time">2028年1月1日 11:11  星期一</span>
+    <a href="#">温馨提示：为了能正常浏览，请使用高版本浏览器！（IE10+）</a>
+</section>
+<!--主体内容-->
+<section class="publicMian">
+    <div class="left" th:replace="main/public::#public_left(activeUri='function')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>用户管理页面 >> 用户添加页面</span>
+        </div>
+        <div class="providerAdd">
+            <form th:action="@{/add}" onsubmit="return checkForm()" th:method="post">
+                <!--div的class 为error是验证错误，ok是验证成功-->
+                <div class="">
+                    <label for="username">用户名：</label>
+                    <input type="text" name="username" id="username"/>
+                    <span>*请输入用户名，且不能重复</span>
+                </div>
+                <div>
+                    <label for="realName">真实姓名：</label>
+                    <input type="text" name="real_name" id="realName"/>
+                    <span >*请输入真实姓名</span>
+                </div>
+                <div>
+                    <label for="newPassword">用户密码：</label>
+                    <input type="text" name="password" id="newPassword"/>
+                    <span>*密码长度必须大于6位小于20位</span>
+
+                </div>
+                <div>
+                    <label for="rePassword">确认密码：</label>
+                    <input type="text"  id="rePassword"/>
+                    <span>*请输入确认密码</span>
+                </div>
+                <div>
+                    <label >用户性别：</label>
+
+                    <select name="gender">
+                        <option value="1">女</option>
+                        <option value="2">男</option>
+                    </select>
+                    <span></span>
+                </div>
+                <!--<div>-->
+                    <!--<label for="birthday">出生日期：</label>-->
+                    <!--<input type="text" name="birthday" id="birthday"/>-->
+                    <!--<span >*格式 yyyy-MM-dd </span>-->
+                <!--</div>-->
+                <div>
+                    <label >用户类别：</label>
+                    <input type="radio" name="user_type" value="1" />管理员
+                    <input type="radio" name="user_type" value="2" checked/>经理
+                    <input type="radio" name="user_type" value="3"/>普通用户
+                </div>
+                <div class="providerAddBtn">
+                    <!--<a href="#">保存</a>-->
+                    <!--<a href="userList.html">返回</a>-->
+                    <input type="submit" value="保存" onclick="history.back(-1)"/>
+                    <input type="button" value="返回" onclick="history.back(-1)"/>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</section>
+<footer class="footer"><div style="text-align:center;">	<p><a href="http://www.mengxuegu.com/" target="_blank">梦学谷 www.mengxuegu.com</a> 版权所有</p></div></footer>
+<script th:src="@{'/js/time.js'}" src="js/time.js"></script>
+</body>
+</html>

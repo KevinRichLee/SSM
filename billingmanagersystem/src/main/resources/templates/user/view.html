@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>梦学谷账单管理系统</title>
+    <link rel="stylesheet" href="../css/public.css"/>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader">
+    <h1>梦学谷账单管理系统</h1>
+
+    <div class="publicHeaderR">
+        <p><span>下午好！</span><span style="color: #fff21b"> Admin</span> , 欢迎你！</p>
+        <a href="../main/login.html">退出</a>
+    </div>
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public::#public_time">
+
+</section>
+<!--主体内容-->
+<section class="publicMian ">
+    <div class="left" th:replace="main/public::#public_left(activeUri='function')">
+
+    </div>
+    <div class="right">
+        <div class="location">
+            <strong>你现在所在的位置是:</strong>
+            <span>用户管理页面 >> 用户信息查看页面</span>
+        </div>
+        <div class="providerView">
+            <p><strong>用户名：</strong><span th:text="${user.username}">hanlu</span></p>
+            <p><strong>真实姓名：</strong><span th:text="${user.real_name}">韩露</span></p>
+            <p><strong>用户性别：</strong><span th:text="${user.gender}">女</span></p>
+            <p><strong>出生日期：</strong><span th:text="${#dates.format(user.birthday,'yyyy-MM-dd')}">2011/2/1</span></p>
+            <p><strong>用户类别：</strong><span th:text="${user.user_type}">经理</span></p>
+            <a onclick="history.back(-1)" href="#">返回</a>
+        </div>
+    </div>
+</section>
+<footer class="footer"><div style="text-align:center;">	<p><a href="http://www.mengxuegu.com/" target="_blank">梦学谷 www.mengxuegu.com</a> 版权所有</p></div></footer>
+
+	<script th:src="@{'/js/time.js'}" src="js/time.js"></script>
+
+
+</body>
+</html>

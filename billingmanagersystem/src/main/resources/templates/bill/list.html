@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>梦学谷账单管理系统</title>
+     <link rel="stylesheet" href="../css/public.css"/>
+    <link rel="stylesheet" href="../css/style.css"/>
+</head>
+<script>
+    function changeBillname(billName) {
+        alert(billName.value)
+        $.post("/bill/bid",{"bid":billName.value},function (data) {
+            $(data).each(function () {
+                $("#pay").append("<option value='"+this.id+"'>"+this.pid+"</option>")
+            })
+        },"json");
+     }
+
+</script>
+<script>
+    $(function () {
+        $("#bid option[value='1']").prop("selected",true);
+    })
+</script>
+<body>
+<!--头部-->
+    <header class="publicHeader">
+        <h1>梦学谷账单管理系统</h1>
+        <div class="publicHeaderR">
+            <p><span>下午好！</span><span style="color: #fff21b"> Admin</span> , 欢迎你！</p>
+            <a href="../main/login.html">退出</a>
+        </div>
+    </header>
+<!--时间-->
+    <section class="publicTime" th:replace="main/public::#public_time">
+           </section>
+<!--主体内容-->
+    <section class="publicMian ">
+        <div class="left" th:replace="main/public::#public_left(activeUri='bill')">
+
+        </div>
+        <div class="right">
+            <div class="location">
+                <strong>你现在所在的位置是:</strong>
+                <span>账单管理页面</span>
+            </div>
+			<form id="searchForm" th:action="@{/bill}" th:method="get" >
+            <div class="search">
+                <span>商品名称：</span>
+                <input name="bill_name" type="text" th:value="${bill.bill_name}" placeholder="请输入商品的名称"/>
+                
+                <span>供应商：</span>
+                <select name="bid" onchange="changeBillname(this)" id="bid">
+                    <option value="0" selected="selected">--请选择--</option>
+                    <option th:each="b:${bills}" th:value="${b.bid}"  th:text="${b.bill_name}" ></option>
+                </select>
+
+                <span>是否付款：</span>
+                <select name="pay" id="pay">
+                    <option value="0" selected="selected">--请选择--</option>
+                    <option value="1" >未付款</option>
+					<option value="2" >已付款</option>
+                </select>
+
+                <input type="button" onclick="$('#searchForm').submit()" value="查询"/>
+                <a href="../bill/add.html">添加帐单</a>
+            </div>
+			</form>
+            <!--账单表格 样式和供应商公用-->
+            <table class="providerTable" cellpadding="0" cellspacing="0">
+                <tr class="firstTr">
+                    <th width="10%">账单编码</th>
+                    <th width="20%">商品名称</th>
+                    <th width="10%">供应商</th>
+                    <th width="10%">总金额</th>
+                    <th width="10%">是否付款</th>
+                    <th width="10%">创建时间</th>
+                    <th width="30%">操作</th>
+                </tr>
+                <tr th:each="b:${bills}">
+                    <td th:text="${b.bill_code}">PRO-CODE—001</td>
+                    <td th:text="${b.bill_name}">测试供应商001</td>
+                    <td th:text="${b.bill_com}">北京市粮油总公司</td>
+                    <td th:text="${b.money}">22.00</td>
+                    <td th:text="${b.pay}">未付款</td>
+                    <td th:text="${#dates.format(b.create_date,'yyyy-MM-dd')}">2015-11-12</td>
+                    <td>
+                        <a href="view.html"><img src="../img/read.png" alt="查看" title="查看"/></a>
+                        <a href="update.html"><img src="../img/xiugai.png" alt="修改" title="修改"/></a>
+                        <a href="#" class="delete"><img src="../img/schu.png" alt="删除" title="删除"/></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+	<!--点击删除按钮后弹出的页面-->
+	<div class="zhezhao"></div>
+	<form method="post" id="deleteForm">
+		<input type="hidden" name="_method" value="delete">
+		<div class="remove" id="removeProv">
+		   <div class="removerChid">
+			   <h2>提示</h2>
+			   <div class="removeMain" >
+				   <p>你确定要删除吗？</p>
+				   <a href="#" id="yes">确定</a>
+				   <a href="#" id="no">取消</a>
+			   </div>
+		   </div>
+		</div>
+	</form>
+	
+	<footer class="footer"><div style="text-align:center;">	<p><a href="http://www.mengxuegu.com/" target="_blank">梦学谷 www.mengxuegu.com</a> 版权所有</p></div></footer>
+
+	<script th:src="@{'/js/jquery.js'}" src="../js/jquery.js"></script>
+	<script th:src="@{'/js/js.js'}" src="../js/js.js"></script>
+    <script th:src="@{'/js/time.js'}" src="js/time.js"></script>
+
+</body>
+</html>

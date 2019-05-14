@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+<html >
+<head lang="en" th:replace="main/public::#public_head">
+
+</head>
+<body>
+<!--头部-->
+<header class="publicHeader" th:replace="main/public::#public_header">
+
+</header>
+<!--时间-->
+<section class="publicTime" th:replace="main/public::#public_time">
+</section>
+<!--主体内容-->
+<section class="publicMian">
+    <div class="left" th:replace="main/public::#public_left(activeUri='functions')">
+
+    </div>
+    <div class="right">
+        <img class="wColck" src="../img/clock.jpg" alt=""/>
+        <div class="wFont">
+            <h2 th:text="${user.username}">Admin</h2>
+            <p>欢迎来到梦学谷账单管理系统!</p>
+			<span id="hours"></span>
+        </div>
+    </div>
+</section>
+<footer class="footer" th:replace="main/public::#public_foot">
+
+</footer>
+<script th:src="@{'/js/time.js'}" src="js/time.js"></script>
+
+</body>
+</html>
